@@ -1,0 +1,39 @@
+import math
+import matplotlib.pyplot as mplib
+import numpy as np
+
+
+def erlang(n, calls, callDuration):
+
+    ao = (calls/60) * callDuration
+    numerator = (ao ** n) / (math.factorial(n))
+    denominator = 0
+    for b in range(n + 1):
+        denominator += (ao ** b) / math.factorial(b)
+    gos = numerator/denominator
+    return gos
+
+
+gosResults = []
+t = 0
+while True:                                   #guaranteed to enter loop at least once
+
+    gosResults.append(erlang(t, 600, 3))
+    if gosResults[t] <= 0.01:
+        break                                 #have reached a number of channels for which the GoS is acceptable
+    t+= 1                                     #increment counter
+
+
+for x in gosResults:
+    print('No. of channels: ' + str(gosResults.index(x)) )
+    print(str(round((x*100),4)) + '%')
+
+
+xAxis = np.linspace(0, len(gosResults), 1)
+mplib.plot(gosResults)
+mplib.xlabel('Number of Channels')
+mplib.ylabel('Grade of Service')
+
+mplib.title("Plot of Grade of Service for Given Number of Channels Available")
+
+mplib.legend()
