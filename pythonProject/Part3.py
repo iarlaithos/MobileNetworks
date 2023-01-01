@@ -44,19 +44,30 @@ def monte_carlo(ao):  # ao is the offered traffic for the simulation
 
     return monteCarloGos
 
+
+def erlang(n, ao):
+    numerator = (ao ** n) / (factorial(n))
+    denominator = 0
+    for b in range(n + 1):
+        denominator += (ao ** b) / factorial(b)
+    gos = numerator / denominator
+    return gos
+
+
+erlang_Gos = []
 monteCarlo_Gos = []
+
 callsph = range(500, 10001, 500)
 traffic = []
 
 for i in callsph:
     t = round((i / 3600) * 180)
     traffic.append(t)
+    erlang_Gos.append(erlang(42, t))  # erlang b formula
 
-# run monte carlo simulation 5 times to ge tan average value
+# run monte carlo simulation 5 times for each distribution type
 for i in range(1, 6):
-    print('*********************')
     monteCarlo_Gos.append(monte_carlo(callsph))
-    print('*********************')
 
 # get mean value of simulation runs
 monteCarlo_Gos_mean = numpy.mean(monteCarlo_Gos, axis=0)
@@ -71,10 +82,14 @@ print(monteCarlo_Gos_std)
 print("################## traffic ##################")
 print(traffic)
 
+print("################## Erlang GoS ##################")
+print(erlang_Gos)
+
 # Plots
-mplib.plot(traffic, monteCarlo_Gos_mean, label='Monte Carlo')
+mplib.plot(traffic, erlang_Gos, label='Erlang (Part 1)')
+mplib.plot(traffic, monteCarlo_Gos_mean, label='Monte Carlo (Part 2)')
 mplib.legend()
-mplib.title("Plot of Grade of Service vs Offered Traffic")
+mplib.title("Comparison of Results from Part 1 & Part 2")
 mplib.xlabel("Traffic")
 mplib.ylabel("Grade of Service")
 mplib.show()

@@ -30,10 +30,11 @@ for x in gosResults:
 
 
 xAxis = np.linspace(0, len(gosResults), 1)
-mplib.plot(gosResults)
+mplib.plot(gosResults, label='Erlang B')
 mplib.xlabel('Number of Channels')
 mplib.ylabel('Grade of Service')
 
-mplib.title("Plot of Grade of Service for Given Number of Channels Available")
+mplib.title("Plot of Grade of Service vs the Number of Channels Available")
 
 mplib.legend()
+mplib.show()
