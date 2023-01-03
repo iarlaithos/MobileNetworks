@@ -132,11 +132,33 @@ print('Lines needed per hour')
 for i in range(0,24):
     print('Hour ' + str(i) + ': ' + str(lines_needed[i]) + ' lines needed, ' + str(42 - lines_needed[i]) + ' lines disabled')
 
+# Energy reduction
+energy_reduction = []
+for i in range(0,24):
+    energy_reduction.append(1 -(lines_needed[i]/42))
+
 # Plot
-mplib.plot(traffic_mean, erlang_gos_mean, label='Erlang')
-mplib.plot(traffic_mean, monteCarlo_Gos_mean, label='Monte Carlo')
-mplib.legend()
-mplib.title("Plot of Grade of Service vs Offered Traffic")
-mplib.xlabel("Traffic")
-mplib.ylabel("Grade of Service")
+#mplib.plot(traffic_mean, erlang_gos_mean, label='Erlang')
+#mplib.plot(traffic_mean, monteCarlo_Gos_mean, label='Monte Carlo')
+#mplib.legend()
+#mplib.title("Plot of Grade of Service vs Offered Traffic")
+#mplib.xlabel("Traffic")
+#mplib.ylabel("Grade of Service")
+#mplib.show()
+
+figure, axis = mplib.subplots(3, 1)
+
+# For GoS vs Offered Traffic
+axis[0].plot(traffic_mean, erlang_gos_mean, label='Erlang')
+axis[0].plot(traffic_mean, monteCarlo_Gos_mean, label='Monte Carlo')
+axis[0].set_title("Plot of Grade of Service vs Offered Traffic")
+
+# For Hour vs channels Needed
+axis[1].plot(range(0,24), lines_needed)
+axis[1].set_title("Hour vs Channels Needed")
+
+# For Energy Reduction per Hour
+axis[2].plot(range(0,24), energy_reduction )
+axis[2].set_title("Hour vs Energy Reduction")
+
 mplib.show()
