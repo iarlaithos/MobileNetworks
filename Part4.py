@@ -45,7 +45,19 @@ def monte_carlo(ao):  # ao is the offered traffic for the simulation
 
     return monteCarloGos
 
+def erlang(n, callsph):
+    erlangGos = []
+    for i in callsph:
+        ao = ceil((i / 3600) * 180)
+        numerator = (ao ** n) / (factorial(n))
+        denominator = 0
+        for b in range(n + 1):
+            denominator += (ao ** b) / factorial(b)
+        gos = numerator / denominator
+        erlangGos.append(gos)
+    return erlangGos
 
+erlang_gos = []
 monteCarlo_Gos = []
 total_traffic = []
 # Call Proportions means the percentage of total traffic in a day during that hour
@@ -61,6 +73,7 @@ for i in range(0, 24):
         traffic.append(t)
     total_traffic.append(traffic)
 
+    erlang_gos.append(erlang(42, callsph))
     monteCarlo_Gos.append(monte_carlo(callsph))
 
 traffic_mean = []
@@ -69,9 +82,16 @@ for x in range(0,20):
     for y in total_traffic:
         sum += y[x]
     traffic_mean.append(sum/len(total_traffic))
-print(traffic_mean)
 
-# get mean value of simulation runs
+#for t in traffic_mean:
+    #erlang_gos.append(erlang(42, t))  # erlang b formula
+
+# get erlang mean value of simulation runs
+erlang_gos_mean = numpy.mean(erlang_gos, axis=0)
+print("################## Erlang GoS Mean ##################")
+print(erlang_gos_mean)
+
+# get monte carlo mean value of simulation runs
 monteCarlo_Gos_mean = numpy.mean(monteCarlo_Gos, axis=0)
 print("################## Monte Carlo GoS Mean ##################")
 print(monteCarlo_Gos_mean)
@@ -81,7 +101,10 @@ monteCarlo_Gos_std = numpy.std(monteCarlo_Gos, axis=0)
 print("################## Monte Carlo GoS Standard Deviation ##################")
 print(monteCarlo_Gos_std)
 
+
+
 # Plot
+mplib.plot(traffic_mean, erlang_gos_mean, label='Erlang')
 mplib.plot(traffic_mean, monteCarlo_Gos_mean, label='Monte Carlo')
 mplib.legend()
 mplib.title("Plot of Grade of Service vs Offered Traffic")
