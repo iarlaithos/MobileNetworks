@@ -79,7 +79,6 @@ def find_channels(k, callph):
     return N
 
 
-
 def erlang(n, callsph):
     erlangGos = []
     for i in callsph:

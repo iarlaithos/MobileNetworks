@@ -65,7 +65,7 @@ callProportions = [0.0009, 0.0005, 0.0004, 0.0004, 0.0008, 0.0044, 0.0168, 0.051
                        0.0881, 0.089, 0.0866, 0.0848, 0.0821, 0.068, 0.047, 0.0306, 0.0183, 0.0095, 0.0043, 0.002]
 # run monte carlo simulation 5 times for each distribution type
 for i in range(0, 24):
-    callspd = range(5000, 100001, 5000)
+    callspd = range(500, 10001, 500)
     callsph = [ceil(callProportions[i]*z) for z in callspd]
     traffic = []
     for j in callsph:
@@ -83,9 +83,6 @@ for x in range(0,20):
         sum += y[x]
     traffic_mean.append(sum/len(total_traffic))
 
-#for t in traffic_mean:
-    #erlang_gos.append(erlang(42, t))  # erlang b formula
-
 # get erlang mean value of simulation runs
 erlang_gos_mean = numpy.mean(erlang_gos, axis=0)
 print("################## Erlang GoS Mean ##################")
@@ -100,8 +97,6 @@ print(monteCarlo_Gos_mean)
 monteCarlo_Gos_std = numpy.std(monteCarlo_Gos, axis=0)
 print("################## Monte Carlo GoS Standard Deviation ##################")
 print(monteCarlo_Gos_std)
-
-
 
 # Plot
 mplib.plot(traffic_mean, erlang_gos_mean, label='Erlang')

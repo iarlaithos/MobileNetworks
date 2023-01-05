@@ -16,12 +16,12 @@ def erlang(n, calls, callDuration):
 
 gosResults = []
 t = 0
-while True:                                   #guaranteed to enter loop at least once
+while True:
 
     gosResults.append(erlang(t, 600, 3))
     if gosResults[t] <= 0.01:
-        break                                 #have reached a number of channels for which the GoS is acceptable
-    t+= 1                                     #increment counter
+        break
+    t+= 1
 
 
 for x in gosResults:
